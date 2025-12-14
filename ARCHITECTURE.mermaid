@@ -1,0 +1,67 @@
+flowchart TB
+    subgraph Worker["👷 Worker Experience"]
+        W1[Open App on Phone]
+        W2[View Next Shift: 3:00 AM]
+        W3[See Upcoming Week Schedule]
+        W4[Get SMS Notification]
+        W5[Dashboard Auto-Updates]
+    end
+
+    subgraph Admin["👨‍💼 Admin Experience"]
+        A1[Login to Admin Panel]
+        A2[Edit Shift Time]
+        A3[Send Custom Message]
+    end
+
+    subgraph App["🚀 Next.js App - Vercel"]
+        APP1[Worker Dashboard<br/>Public - No Auth]
+        APP2[Admin Panel<br/>Password Protected]
+        APP3[API: /api/notify-ghl]
+    end
+
+    subgraph DB["📊 Supabase"]
+        DB1[(shifts table)]
+        DB2[Real-time Subscriptions]
+    end
+
+    subgraph GHL["📲 GoHighLevel"]
+        GHL1[Workflow: Start Time Notification]
+        GHL2[Contacts Tagged: ups-workers]
+        GHL3[Send SMS to All Workers]
+    end
+
+    %% Worker Flow
+    W1 --> APP1
+    APP1 --> DB1
+    DB1 --> DB2
+    DB2 -.Real-time Update.-> APP1
+    APP1 --> W2
+    APP1 --> W3
+    W4 -.SMS.-> W1
+    DB2 --> W5
+
+    %% Admin Flow
+    A1 --> APP2
+    A2 --> APP2
+    A3 --> APP2
+    APP2 --> DB1
+    APP2 --> APP3
+
+    %% SMS Notification Flow
+    APP3 --> GHL1
+    GHL1 --> GHL2
+    GHL2 --> GHL3
+    GHL3 -.SMS.-> W4
+
+    %% Styling
+    classDef workerStyle fill:#e1f5e1,stroke:#4caf50,stroke-width:2px
+    classDef adminStyle fill:#fff3e0,stroke:#ff9800,stroke-width:2px
+    classDef appStyle fill:#e3f2fd,stroke:#2196f3,stroke-width:2px
+    classDef dbStyle fill:#f3e5f5,stroke:#9c27b0,stroke-width:2px
+    classDef ghlStyle fill:#fce4ec,stroke:#e91e63,stroke-width:2px
+
+    class W1,W2,W3,W4,W5 workerStyle
+    class A1,A2,A3 adminStyle
+    class APP1,APP2,APP3 appStyle
+    class DB1,DB2 dbStyle
+    class GHL1,GHL2,GHL3 ghlStyle
