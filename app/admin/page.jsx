@@ -67,7 +67,8 @@ export default function AdminPanel() {
       alert('Error saving shift');
     } else {
       // Send SMS notification
-      const formattedDate = new Date(shift.date + 'T00:00:00').toLocaleDateString('en-US', { 
+      const shiftDate = new Date(shift.date + 'T00:00:00');
+      const formattedDate = shiftDate.toLocaleDateString('en-US', { 
         weekday: 'long',
         month: 'numeric',
         day: 'numeric'
@@ -122,8 +123,8 @@ export default function AdminPanel() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 flex items-center justify-center p-6">
-        <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md">
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 flex items-center justify-center p-4">
+        <div className="bg-white rounded-2xl shadow-2xl p-6 sm:p-8 w-full max-w-md">
           <div className="flex items-center gap-3 mb-6">
             <Clock className="w-8 h-8 text-blue-600" />
             <h1 className="text-2xl font-bold text-gray-900">Admin Login</h1>
@@ -138,14 +139,14 @@ export default function AdminPanel() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
                 placeholder="Enter admin password"
               />
             </div>
             
             <button
               type="submit"
-              className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+              className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors text-base"
             >
               Login
             </button>
@@ -156,45 +157,47 @@ export default function AdminPanel() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 p-4 sm:p-6">
       {/* Header */}
-      <div className="max-w-4xl mx-auto mb-6">
-        <div className="bg-white rounded-2xl shadow-xl p-6 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Clock className="w-8 h-8 text-blue-600" />
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">Admin Panel</h1>
-              <p className="text-sm text-gray-600">Manage shift times & notifications</p>
+      <div className="max-w-4xl mx-auto mb-4 sm:mb-6">
+        <div className="bg-white rounded-2xl shadow-xl p-4 sm:p-6">
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3 min-w-0">
+              <Clock className="w-7 h-7 sm:w-8 sm:h-8 text-blue-600 flex-shrink-0" />
+              <div className="min-w-0">
+                <h1 className="text-xl sm:text-2xl font-bold text-gray-900 truncate">Admin Panel</h1>
+                <p className="text-xs sm:text-sm text-gray-600 hidden sm:block">Manage shift times & notifications</p>
+              </div>
             </div>
+            
+            <button
+              onClick={() => setIsAuthenticated(false)}
+              className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 text-gray-600 hover:text-gray-900 transition-colors flex-shrink-0"
+            >
+              <LogOut className="w-4 h-4 sm:w-5 sm:h-5" />
+              <span className="text-sm sm:text-base">Logout</span>
+            </button>
           </div>
-          
-          <button
-            onClick={() => setIsAuthenticated(false)}
-            className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-gray-900 transition-colors"
-          >
-            <LogOut className="w-5 h-5" />
-            Logout
-          </button>
         </div>
       </div>
 
       {/* Announcement Section */}
-      <div className="max-w-4xl mx-auto mb-6">
-        <div className="bg-white rounded-2xl shadow-xl p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Send Announcement</h2>
+      <div className="max-w-4xl mx-auto mb-4 sm:mb-6">
+        <div className="bg-white rounded-2xl shadow-xl p-4 sm:p-6">
+          <h2 className="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4">Send Announcement</h2>
           
-          <div className="flex gap-3">
+          <div className="flex flex-col sm:flex-row gap-3">
             <input
               type="text"
               value={announcement}
               onChange={(e) => setAnnouncement(e.target.value)}
               placeholder="Type announcement message..."
-              className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
             />
             
             <button
               onClick={handleSendAnnouncement}
-              className="flex items-center gap-2 px-6 py-3 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition-colors"
+              className="flex items-center justify-center gap-2 px-6 py-3 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition-colors text-base"
             >
               <Send className="w-5 h-5" />
               Send
@@ -205,8 +208,8 @@ export default function AdminPanel() {
 
       {/* Shifts List */}
       <div className="max-w-4xl mx-auto">
-        <div className="bg-white rounded-2xl shadow-xl p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Manage Shifts</h2>
+        <div className="bg-white rounded-2xl shadow-xl p-4 sm:p-6">
+          <h2 className="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4">Manage Shifts</h2>
           
           {loading ? (
             <div className="text-center py-8 text-gray-600">Loading shifts...</div>
@@ -225,17 +228,19 @@ export default function AdminPanel() {
                 return (
                   <div
                     key={shift.id}
-                    className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:border-blue-300 transition-colors"
+                    className="p-3 sm:p-4 border border-gray-200 rounded-lg hover:border-blue-300 transition-colors"
                   >
-                    <div className="flex-1">
-                      <div className="font-semibold text-gray-900">
+                    {/* Date - Always full width */}
+                    <div className="mb-3">
+                      <div className="font-semibold text-gray-900 text-base sm:text-lg">
                         {dateDisplay}
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-3">
+                    {/* Time input and Save button */}
+                    <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
                       {shift.day_of_week === 'Sunday' ? (
-                        <div className="px-6 py-2 bg-gray-100 text-gray-600 rounded-lg font-semibold">
+                        <div className="w-full px-4 py-3 bg-gray-100 text-gray-600 rounded-lg font-semibold text-center text-base">
                           OFF
                         </div>
                       ) : (
@@ -244,12 +249,12 @@ export default function AdminPanel() {
                             type="time"
                             value={shift.start_time || ''}
                             onChange={(e) => handleTimeChange(shift.id, e.target.value)}
-                            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
                           />
                           
                           <button
                             onClick={() => handleSaveShift(shift)}
-                            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+                            className="flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors text-base sm:flex-shrink-0"
                           >
                             <Save className="w-4 h-4" />
                             Save
