@@ -53,7 +53,13 @@ export default function WorkerDashboard() {
 
     const updateTimer = () => {
       const now = new Date();
-      const shiftDateTime = new Date(`${nextShift.date}T${nextShift.start_time}`);
+      
+      // Parse shift date and time in local timezone
+      const [year, month, day] = nextShift.date.split('-').map(Number);
+      const [hours, minutes] = nextShift.start_time.split(':').map(Number);
+      
+      // Create date object in local timezone
+      const shiftDateTime = new Date(year, month - 1, day, hours, minutes, 0);
       const diff = shiftDateTime - now;
 
       if (diff > 0) {
@@ -107,7 +113,7 @@ export default function WorkerDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 pb-24">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 pb-8">
       {/* Header */}
       <div className="bg-white shadow-sm">
         <div className="max-w-md mx-auto px-6 py-4">
@@ -181,26 +187,6 @@ export default function WorkerDashboard() {
               </div>
             </div>
           ))}
-        </div>
-      </div>
-
-      {/* Bottom Navigation (Decorative) */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg">
-        <div className="max-w-md mx-auto px-6 py-4">
-          <div className="flex justify-around items-center">
-            <div className="flex flex-col items-center gap-1 text-blue-600">
-              <Clock className="w-6 h-6" />
-              <span className="text-xs font-medium">Schedule</span>
-            </div>
-            <div className="flex flex-col items-center gap-1 text-gray-400">
-              <Calendar className="w-6 h-6" />
-              <span className="text-xs font-medium">Calendar</span>
-            </div>
-            <div className="flex flex-col items-center gap-1 text-gray-400">
-              <Bell className="w-6 h-6" />
-              <span className="text-xs font-medium">Alerts</span>
-            </div>
-          </div>
         </div>
       </div>
     </div>
