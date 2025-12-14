@@ -120,16 +120,6 @@ export default function AdminPanel() {
     return `${displayHour}:${minutes} ${ampm}`;
   };
 
-  const formatDate = (dateString) => {
-    const date = new Date(dateString + 'T00:00:00');
-    return date.toLocaleDateString('en-US', { 
-      weekday: 'long',
-      month: 'numeric',
-      day: 'numeric',
-      year: 'numeric'
-    });
-  };
-
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 flex items-center justify-center p-6">
@@ -222,46 +212,54 @@ export default function AdminPanel() {
             <div className="text-center py-8 text-gray-600">Loading shifts...</div>
           ) : (
             <div className="space-y-3">
-              {shifts.map((shift) => (
-                <div
-                  key={shift.id}
-                  className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:border-blue-300 transition-colors"
-                >
-                  <div className="flex-1">
-                    <div className="font-semibold text-gray-900">
-                      {formatDate(shift.date)}
-                    </div>
-                    <div className="text-sm text-gray-600">
-                      {shift.day_of_week}
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-3">
-                    {shift.day_of_week === 'Sunday' ? (
-                      <div className="px-4 py-2 bg-gray-100 text-gray-600 rounded-lg font-semibold">
-                        OFF
+              {shifts.map((shift) => {
+                // Parse date correctly to avoid timezone issues
+                const shiftDate = new Date(shift.date + 'T00:00:00');
+                const dateDisplay = shiftDate.toLocaleDateString('en-US', { 
+                  weekday: 'long',
+                  month: 'numeric',
+                  day: 'numeric',
+                  year: 'numeric'
+                });
+                
+                return (
+                  <div
+                    key={shift.id}
+                    className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:border-blue-300 transition-colors"
+                  >
+                    <div className="flex-1">
+                      <div className="font-semibold text-gray-900">
+                        {dateDisplay}
                       </div>
-                    ) : (
-                      <>
-                        <input
-                          type="time"
-                          value={shift.start_time || ''}
-                          onChange={(e) => handleTimeChange(shift.id, e.target.value)}
-                          className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        />
-                        
-                        <button
-                          onClick={() => handleSaveShift(shift)}
-                          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors"
-                        >
-                          <Save className="w-4 h-4" />
-                          Save
-                        </button>
-                      </>
-                    )}
+                    </div>
+
+                    <div className="flex items-center gap-3">
+                      {shift.day_of_week === 'Sunday' ? (
+                        <div className="px-6 py-2 bg-gray-100 text-gray-600 rounded-lg font-semibold">
+                          OFF
+                        </div>
+                      ) : (
+                        <>
+                          <input
+                            type="time"
+                            value={shift.start_time || ''}
+                            onChange={(e) => handleTimeChange(shift.id, e.target.value)}
+                            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          />
+                          
+                          <button
+                            onClick={() => handleSaveShift(shift)}
+                            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+                          >
+                            <Save className="w-4 h-4" />
+                            Save
+                          </button>
+                        </>
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>
